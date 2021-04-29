@@ -13,28 +13,19 @@ class MultiTaxiWrapper:
         option_to_stand_by = False
         )
 
-        # This is duplicate because __init__ also calls reset(),
-        # however this is the way we can get the initial state
-        self.state = self.env.reset()
-
-    def get_total_observation(self):
-        return self.state
-
-    def get_single_observation(self, agent_name):
-        return self.state[agent_name]
-
-    def is_done(self):
-        return self.env.dones['__all__']
-
+    def reset(self):
+        observation = self.env.reset()
+        observation_list = [obs for obs in observation.values()]
+        return observation_list
+        
     def step(self, action):
-        self.env.step(action)
+        # All of these are dicts, we need them as lists:
+        observation, reward, done, info = self.env.step(action)
+        observation_list = [obs for obs in observation.values()]
+        reward_list = [r for r in reward.values()]      
+        done_list = [d for d in done.values()]      
+        info_list = [i for i in info.values()]      
+        return observation_list, reward_list, done_list, info_list
 
     def render(self):
-        self.env.render()
-
-    @staticmethod
-    def join_actions(action_list):
-        joint_action = {}
-        for action in action_list:
-            joint_action.update(action)
-        return joint_action
+        return self.env.render()

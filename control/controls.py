@@ -1,6 +1,5 @@
 import numpy as np
-
-from MultiTaxiWrapper import MultiTaxiWrapper
+import time
 
 class CentralizedControl:
     def __init__(self, env, agent):
@@ -8,15 +7,17 @@ class CentralizedControl:
         self.agent = agent
 
     def run(self):
+        observation = self.env.reset()
         i = 1
-        while(not self.env.is_done()):
-            observation = self.env.get_total_observation()
+        done = [False]
+        while(not all(done)):
             print(f"Step {i}:")
             i += 1
             action = self.agent.get_action(observation)
-            self.env.step(action)
+            observation, reward, done, info = self.env.step(action)
+            print(done)
+            self.env.render()
         print(f"Finished")
-        self.env.render()
 
 class DecentralizedControl:
     def __init__(self, env, agent_list):
@@ -32,7 +33,7 @@ class DecentralizedControl:
             actions = []
             for agent in self.agents:
                 actions.append(agent.get_action(observation))
-            joint_action = MultiTaxiWrapper.join_actions(actions)
+            # joint_action = MultiTaxiWrapper.join_actions(actions)
             self.env.step(joint_action)
         print(f"Finished")
         self.env.render()

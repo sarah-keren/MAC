@@ -1,6 +1,6 @@
 # Bad imports to fix paths: see https://stackoverflow.com/questions/30669474/beyond-top-level-package-error-in-relative-import
-import sys; sys.path.append('../..')
-
+import sys; sys.path.append('..')
+sys.path.append('../environments/MultiTaxiEnv')
 from MultiTaxiWrapper import MultiTaxiWrapper
 from control.controls import CentralizedControl, DecentralizedControl
 from taxi_agents import RandomNTaxisAgent
@@ -8,7 +8,7 @@ from taxi_agents import RandomNTaxisAgent
 def main():
     print(f"\n{'*'*80}\nStarting Tests:\n{'*'*80}\n")
     centralized_random_test()
-    decentralized_random_test()
+    # decentralized_random_test()
 
 def centralized_random_test():
     print(f"Running centralized random test:\n")
@@ -27,6 +27,8 @@ def decentralized_random_test():
     
     print('Initializing environment...')
     env = MultiTaxiWrapper(2, 1)
+
+    print(f"{'*'*80}\n{env.env._get_observation_space_list()}\n{'*'*80}")
 
     agent1 = RandomNTaxisAgent(['taxi_1'])
     agent2 = RandomNTaxisAgent(['taxi_2'])
