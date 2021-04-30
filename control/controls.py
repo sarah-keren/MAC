@@ -6,16 +6,15 @@ class CentralizedControl:
         self.env = env
         self.agent = agent
 
-    def run(self):
+    def run(self, max_episode_lenth=np.inf):
         observation = self.env.reset()
         i = 1
         done = [False]
-        while(not all(done)):
+        while(not all(done) and i < max_episode_lenth):
             print(f"Step {i}:")
             i += 1
             action = self.agent.get_action(observation)
             observation, reward, done, info = self.env.step(action)
-            print(done)
             self.env.render()
         print(f"Finished")
 
@@ -24,16 +23,16 @@ class DecentralizedControl:
         self.env = env
         self.agents = agent_list
 
-    def run(self):
+    def run(self, max_episode_lenth=np.inf):
         i = 1
         observation = None
-        while(not self.env.is_done()):
+        done = [False]
+        while(not all(done) and i < max_episode_lenth):
             print(f"Step {i}:")
             i += 1
-            actions = []
-            for agent in self.agents:
-                actions.append(agent.get_action(observation))
-            # joint_action = MultiTaxiWrapper.join_actions(actions)
-            self.env.step(joint_action)
+            # TODO: Needs needs to be changed when adding observation filters:
+            actions = [agent.get_action(observation) for agent in self.agents]
+            observation, reward, done, info = self.env.step(actions)
+            self.env.render()
         print(f"Finished")
         self.env.render()

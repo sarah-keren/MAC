@@ -9,4 +9,4 @@ class RandomAgent:
         if type(self.space) == list:
             return [space.sample() for space in self.space]
         else:
-            return self.space.sample()
+            return self.space.sample()  
