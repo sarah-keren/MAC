@@ -30,7 +30,7 @@ def set_env(environment_name):
     
     if environment_name == 'taxi':
         sys.path.append('../environments/MultiTaxiEnv')
-        from MultiTaxiWrapper import MultiTaxiWrapper
+        from multi_taxi_wrapper import MultiTaxiWrapper
         num_taxis = 2
         env = MultiTaxiWrapper(2, 1)
 
