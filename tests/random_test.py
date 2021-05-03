@@ -5,9 +5,7 @@ import numpy as np
 
 sys.path.append('..')
 from control.controls import CentralizedControl, DecentralizedControl
-from utils.random_agent import RandomAgent
-
-EMPTY_OBSERVATION_FILTER = lambda x: x
+from mac_utils.random_agent import RandomAgent
 
 def main():
     args = parse_args()
@@ -42,6 +40,12 @@ def set_env(environment_name):
         env = make_env.make_env('simple_spread')
         env.discrete_action_input = True
 
+    elif environment_name == 'cleanup':
+        sys.path.append('../environments/cleanup')
+        from cleanup_wrapper import CleanupWrapper
+        num_agents = 5
+        env = CleanupWrapper(num_agents)
+
     return env
 
 def parse_args():
@@ -49,7 +53,7 @@ def parse_args():
     parser.add_argument(
         '-e', '--env',
         required=True,
-        choices=['taxi', 'particle'],
+        choices=['taxi', 'particle', 'cleanup'],
         help='Environment to run test on.'
         )
     return parser.parse_args()
