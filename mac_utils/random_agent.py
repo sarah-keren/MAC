@@ -1,12 +1,12 @@
 class RandomAgent:
-    """observation_space can be either an observation space (Discrete, Box etc)
-       or a list of observation_spaces
+    """action_space can be either an action space (Discrete, Box etc)
+       or a dictionary (key per agent) of action spaces
     """
-    def __init__(self, observation_space):
-        self.space = observation_space
+    def __init__(self, action_space):
+        self.space = action_space
 
     def get_action(self, observation):
-        if type(self.space) == list:
-            return [space.sample() for space in self.space]
+        if type(self.space) == dict:
+            return {agent: self.space[agent].sample() for agent in self.space.keys()}
         else:
-            return self.space.sample()  
+            return self.space.sample()

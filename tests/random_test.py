@@ -14,13 +14,15 @@ def main():
     decentralized_random_test(env)
 
 def centralized_random_test(env):
-    agent = RandomAgent(env.action_space)
+    print("Running centralized control test:")
+    agent = RandomAgent(env.action_spaces)
     observation = env.reset()
     controller = CentralizedControl(env, agent)
     controller.run(100)
 
 def decentralized_random_test(env):
-    agents = [RandomAgent(space) for space in env.action_space]
+    print("Running decentralized control test:")
+    agents = {agent: RandomAgent(env.action_spaces[agent]) for agent in env.agents}
     observation = env.reset()
     controller = DecentralizedControl(env, agents)
     controller.run(100)
@@ -30,21 +32,30 @@ def set_env(environment_name):
     
     if environment_name == 'taxi':
         sys.path.append('../environments/MultiTaxiEnv')
-        from multi_taxi_wrapper import MultiTaxiWrapper
-        num_taxis = 2
-        env = MultiTaxiWrapper(2, 1)
-
-    elif environment_name == 'particle':
-        sys.path.append('../environments/multiagent-particle-envs')
-        import make_env
-        env = make_env.make_env('simple_spread')
-        env.discrete_action_input = True
-
+        from taxi_environment import TaxiEnv
+        env = TaxiEnv(2)
+        # Make sure it works with our API:
+        env.agents = env.taxis_names
+        env.action_spaces = {
+            agent_name: env.action_space for agent_name in env.agents
+        }
+    
     elif environment_name == 'cleanup':
         sys.path.append('../environments/cleanup')
-        from cleanup_wrapper import CleanupWrapper
-        num_agents = 5
-        env = CleanupWrapper(num_agents)
+        from social_dilemmas.envs.cleanup import CleanupEnv
+        env = CleanupEnv(num_agents=5, render=True)
+        env.action_spaces = {
+            agent_name: env.action_space for agent_name in env.agents
+        }
+
+    # Petting Zoo:
+    elif environment_name == 'particle':
+        from pettingzoo.mpe import simple_spread_v2
+        env = simple_spread_v2.parallel_env()
+
+    elif environment_name == 'piston':
+        from pettingzoo.butterfly import pistonball_v4
+        env = pistonball_v4.parallel_env()
 
     return env
 
@@ -53,7 +64,7 @@ def parse_args():
     parser.add_argument(
         '-e', '--env',
         required=True,
-        choices=['taxi', 'particle', 'cleanup'],
+        choices=['taxi', 'particle', 'cleanup', 'piston'],
         help='Environment to run test on.'
         )
     return parser.parse_args()

@@ -9,8 +9,9 @@ class CentralizedControl:
     def run(self, max_episode_lenth=np.inf):
         observation = self.env.reset()
         i = 1
-        done = [False]
-        while(not all(done) and i < max_episode_lenth):
+        done = {'temp_agent': False}
+        while(not all(value == True for value in done.values()) 
+                and i < max_episode_lenth):
             print(f"Step {i}:")
             i += 1
             action = self.agent.get_action(observation)
@@ -26,12 +27,16 @@ class DecentralizedControl:
     def run(self, max_episode_lenth=np.inf):
         i = 1
         observation = None
-        done = [False]
-        while(not all(done) and i < max_episode_lenth):
+        done = {'temp_agent': False}
+        while(not all(value == True for value in done.values()) 
+                and i < max_episode_lenth):
             print(f"Step {i}:")
             i += 1
             # TODO: Needs needs to be changed when adding observation filters:
-            actions = [agent.get_action(observation) for agent in self.agents]
+            actions = {
+                agent_name: self.agents[agent_name].get_action(observation)
+                for agent_name in self.agents.keys()
+                }
             observation, reward, done, info = self.env.step(actions)
             self.env.render()
         print(f"Finished")
