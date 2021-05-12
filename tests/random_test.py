@@ -18,7 +18,7 @@ def centralized_random_test(env):
     agent = RandomAgent(env.action_spaces)
     observation = env.reset()
     controller = CentralizedControl(env, agent)
-    controller.run(100)
+    controller.run(float('inf'))
 
 def decentralized_random_test(env):
     print("Running decentralized control test:")
@@ -48,6 +48,11 @@ def set_env(environment_name):
             agent_name: env.action_space for agent_name in env.agents
         }
 
+    elif environment_name == 'corners':
+        sys.path.append('../environments/corners')
+        from corners_env import CornersEnv
+        env = CornersEnv()
+
     # Petting Zoo:
     elif environment_name == 'particle':
         from pettingzoo.mpe import simple_spread_v2
@@ -55,7 +60,7 @@ def set_env(environment_name):
 
     elif environment_name == 'piston':
         from pettingzoo.butterfly import pistonball_v4
-        env = pistonball_v4.parallel_env()
+        env = pistonball_v4.parallel_env(continuous=False)
 
     return env
 
@@ -64,7 +69,7 @@ def parse_args():
     parser.add_argument(
         '-e', '--env',
         required=True,
-        choices=['taxi', 'particle', 'cleanup', 'piston'],
+        choices=['taxi', 'particle', 'cleanup', 'piston', 'corners'],
         help='Environment to run test on.'
         )
     return parser.parse_args()
