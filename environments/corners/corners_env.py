@@ -26,7 +26,14 @@ class CornersEnv:
  
     def reset(self):
         # Random Start:
-        self.pos = {agent: np.random.choice(range(BOARD_SIZE), size=(2,)) for agent in self.agents}
+        self.pos = {}
+        for agent in self.agents:
+            new_pos = np.random.choice(range(BOARD_SIZE), size=(2,))
+            while any([new_pos[0] == pos[0] and new_pos[1] == pos[1] for pos in self.pos.values()]):
+                # If the random pos already exist just make a new one:
+                new_pos = np.random.choice(range(BOARD_SIZE), size=(2,))
+            self.pos[agent] = new_pos
+        return self._make_observation()
         
     def render(self):
         lines = [list(BOARD_LINE) + ['\n'] for i in range(5)]
@@ -60,7 +67,7 @@ class CornersEnv:
             dones = {agent: False for agent in self.agents}
 
         info = {}
-        observations = {agent: np.array([pos for pos in self.pos if pos != self.pos[agent]])}
+        observations = self._make_observation()
         return observations, rewards, dones, info
 
 
@@ -73,5 +80,15 @@ class CornersEnv:
             [0,0], [4, 0], [0, 4], [4, 4], [2, 2]
         ]
         return all([
-            any([pos[0] == target[0] and pos[1] == target[1] for pos in self.pos])
+            any([pos[0] == target[0] and pos[1] == target[1] for pos in self.pos.values()])
         for target in target_pos])
+
+    def _make_observation(self):
+        return {
+            agent: np.array(
+                # The first element is the position of the current agent, then the rest of them
+                [self.pos[agent]] + [self.pos[agent2] for agent2 in self.agents if agent2 != agent]
+                )
+        for agent in self.agents
+        }
+        
