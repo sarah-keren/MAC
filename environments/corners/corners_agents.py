@@ -30,6 +30,25 @@ class GoalAgent:
 
         return np.random.choice(actions)
 
+class EconomicGoalAgent(GoalAgent):
+    """Like Goal agent, also also bids and the goal
+    can be set later
+    """
+    def __init__(self, position=[0, 0]):
+        super().__init__([0,0])
+        self.pos = position # We need to know to position for the bidding:
+
+    def reset(self, observation):
+        self.pos = observation[0, :]
+
+    def get_bid(self, suggested_goal):
+        # Manhatten Distance
+        return abs(self.pos[0] - suggested_goal[0]) + abs(self.pos[1] - suggested_goal[1])
+
+    def set_task(self, task):
+        self.goal_y, self.goal_x = task
+
+    
 
 def main():
     # Test the agents:
