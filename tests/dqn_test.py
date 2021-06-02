@@ -53,7 +53,7 @@ def set_env(environment_name):
 
     if environment_name == 'taxi':
         sys.path.append('../environments/MultiTaxiEnv')
-        from gal.environments.MultiTaxiEnv.taxi_environment import TaxiEnv
+        from MAC.environments.MultiTaxiEnv.taxi_environment import TaxiEnv
         env = TaxiEnv(2)
         # Make sure it works with our API:
         env.agents = env.taxis_names
@@ -67,7 +67,7 @@ def set_env(environment_name):
 
     elif environment_name == 'cleanup':
         sys.path.append('../environments/cleanup')
-        from gal.environments.cleanup.social_dilemmas.envs.cleanup import CleanupEnv
+        from MAC.environments.cleanup.social_dilemmas.envs.cleanup import CleanupEnv
         env = CleanupEnv(num_agents=5, render=True)
         env.action_spaces = {
             agent_name: env.action_space for agent_name in env.agents
