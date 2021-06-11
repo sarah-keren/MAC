@@ -3,7 +3,6 @@ import sys
 import numpy as np
 sys.path.append('..')
 from MAC.control import controller_decentralized
-from MAC.agents import agent, policy_gradient
 
 class RandomAgent:
     """action_space can be either an action space (Discrete, Box etc)
