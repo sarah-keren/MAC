@@ -3,13 +3,16 @@
 import gym
 from gym.utils import seeding
 import numpy as np
-from config import TAXI_ENVIRONMENT_REWARDS, BASE_AVAILABLE_ACTIONS, ALL_ACTIONS_NAMES
 from gym.spaces import Box, Tuple, MultiDiscrete
 import random
-import sys
+import sys, os
 from contextlib import closing
 from io import StringIO
 from gym import utils
+
+# We need this for the config when calling from a different dir:
+sys.path.append(os.path.dirname(__file__)) 
+from config import TAXI_ENVIRONMENT_REWARDS, BASE_AVAILABLE_ACTIONS, ALL_ACTIONS_NAMES
 
 orig_MAP = [
     "+---------+",
