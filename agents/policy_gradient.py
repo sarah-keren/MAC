@@ -3,8 +3,8 @@ import numpy as np
 
 class PolicyGradient(object):
 
-    def __init__(self, num_actions, theta, num_agents=1, alpha=0.00025, gamma=0.9, mapping_fn=None):
-        self.theta = theta
+    def __init__(self, num_actions, num_obs, is_conv=False, num_agents=1, alpha=0.00025, gamma=0.9, mapping_fn=None):
+        self.num_obs = num_obs[::-1]
         self.alpha = alpha
         self.gamma = gamma
 
@@ -15,6 +15,8 @@ class PolicyGradient(object):
         self.mapping_fn = mapping_fn
         self.num_actions = num_actions
         self.num_agents = num_agents
+        self.theta = np.random.rand(self.num_obs[0], self.num_actions)
+
 
     def softmax(self, state):
         z = state.dot(self.theta)
@@ -63,7 +65,7 @@ class PolicyGradient(object):
     def update_step(self, obs, action, new_obs, reward, done):
         self.rewards.append(reward)
 
-    def update_episode(self,):
+    def update_episode(self):
         """ Update weights, reset records for new episodes"""
         self.update_weights()
 

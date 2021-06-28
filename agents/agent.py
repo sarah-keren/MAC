@@ -1,4 +1,4 @@
-class Agent():
+class Agent:
 
     def __init__(self, decision_maker):
         self.decision_maker = decision_maker

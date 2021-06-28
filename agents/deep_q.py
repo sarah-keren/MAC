@@ -58,7 +58,7 @@ class DQN:
         return loss
 
     def update_step(self, obs, action,new_obs, reward, done):
-        self.replay_buffer.push(obs, action,new_obs, reward, done)
+        self.replay_buffer.push(obs, action, new_obs, reward, done)
 
     def update_episode(self, batch_size):
         if len(self.replay_buffer) > batch_size:
