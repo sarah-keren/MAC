@@ -1,9 +1,12 @@
 import numpy as np
+from MAC.agents.agent import DecisionMaker
 
 
-class PolicyGradient(object):
+class PolicyGradient(DecisionMaker):
 
-    def __init__(self, num_actions, num_obs, is_conv=False, num_agents=1, alpha=0.00025, gamma=0.9, mapping_fn=None):
+    def __init__(self, num_actions, num_obs, is_conv=False, num_agents=1, alpha=0.00025, gamma=0.9,
+                 mapping_fn=None):
+        super().__init__()
         self.num_obs = num_obs[::-1]
         self.alpha = alpha
         self.gamma = gamma

@@ -4,11 +4,14 @@ import numpy as np
 import torch as torch
 import torch.nn as nn
 from torch import autograd
+from MAC.agents.agent import DecisionMaker
 
 
-class DQN:
+class DQN(DecisionMaker):
 
-    def __init__(self, input_dims, num_actions, is_conv=False, learning_rate=3e-4, gamma=0.99, buffer_size=10000, mapping_fn=None):
+    def __init__(self, input_dims, num_actions, is_conv=False, learning_rate=3e-4, gamma=0.99,
+                 buffer_size=10000, mapping_fn=None):
+        super().__init__()
         self.input_dims = input_dims[::-1]
         self.num_actions = num_actions
         self.gamma = gamma

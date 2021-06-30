@@ -4,10 +4,13 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch import autograd
+from MAC.agents.agent import DecisionMaker
 
 
-class DeepPolicyGradient(object):
-    def __init__(self, input_dims, num_actions, is_conv=False, gamma=0.99, learning_rate=0.01, mapping_fn=None):
+class DeepPolicyGradient(DecisionMaker):
+    def __init__(self, input_dims, num_actions, is_conv=False, gamma=0.99, learning_rate=0.01,
+                 mapping_fn=None):
+        super().__init__()
         self.input_dims = input_dims[::-1]
         self.gamma = gamma
         self.reward_mem = []
