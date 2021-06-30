@@ -21,3 +21,6 @@ class EnvWrappper:
 
     def get_env_agents(self):
         return self.env_agents
+
+    def step(self, joint_action):
+        return self.env.step(joint_action)
