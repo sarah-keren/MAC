@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
 
-
 class Controller(ABC):
+    """An abstract controller class, for other controllers
+    to inherit from
+    """
 
     # init agents and their observations
     def __init__(self, environment, agents, central_agent=None):
@@ -10,6 +12,13 @@ class Controller(ABC):
         self.central_agent = central_agent
 
     def run(self, render=False, max_iteration=None):
+        """Runs the controller on the environment given in the init,
+        with the agents given in the init
+
+        Args:
+            render (bool, optional): Whether to render while runngin. Defaults to False.
+            max_iteration ([type], optional): Number of steps to run. Defaults to infinity.
+        """
         done = False
         index = 0
         observation = self.environment.get_env().reset()
@@ -38,5 +47,3 @@ class Controller(ABC):
 
     def get_joint_action(self, observation):
         pass
-
-

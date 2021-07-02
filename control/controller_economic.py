@@ -4,11 +4,6 @@ import numpy as np
 
 class EconomicControl:
 
-    # TODO: Parallel the auctions:
-    # Could be problomatic in serial (the order of tasks matter and can be suboptimal)
-    # TODO: Every agent can have several tasks and not just one
-    # TODO: Return the reward to the agent (needed another data strcutrue)
-
     def __init__(self, env, agents, tasks):
         self.env = env
         self.agents = agents
@@ -23,6 +18,11 @@ class EconomicControl:
         return joint_action
 
     def run(self, max_episode_lenth=np.inf):
+        """Runs the economic control on the env given in init
+
+        Args:
+            max_episode_lenth (int, optional): number of steps. Defaults to np.inf.
+        """
         observation = self.env.reset()
         # We need to give the agents their position so they will know to bid
         for agent_name in self.agents.keys():
@@ -42,6 +42,8 @@ class EconomicControl:
         print(f"Finished")
 
     def _auction_all_tasks(self):
+        """Auctions all the tasks given at init
+        """
         non_busy_agents = list(self.agents.keys())
         for task in self.tasks:
             agent_chosen = self._auction_task(task, non_busy_agents)

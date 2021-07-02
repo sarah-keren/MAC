@@ -8,6 +8,16 @@ class DecentralizedRL(Decentralized):
         super().__init__(env, agents)
 
     def run(self, render=False, max_iteration=None, max_episode_len=1, num_episodes=1, batch_size=0):
+        """Runs the controller on the environment given in the init,
+        with the agents given in the init
+
+        Args:
+            render (bool, optional): Whether to render while runngin. Defaults to False.
+            max_iteration ([type], optional): Number of steps to run. Defaults to infinity.
+            max_episode_len (int, optional): Upper cap on episode length. Defaults to 1.
+            num_episodes (int, optional): Number of episodes. Defaults to 1.
+            batch_size (int, optional): Batch size for the training algorithm. Defaults to 0.
+        """
 
         print("Training...")
         self.train(max_episode_len, num_episodes, batch_size=batch_size)
@@ -37,6 +47,13 @@ class DecentralizedRL(Decentralized):
             self.environment.get_env().render()
 
     def train(self, max_episode_len, num_episodes, batch_size=0):
+        """Train the agents
+
+        Args:
+            max_episode_len (int, optional): Upper cap on episode length. Defaults to 1.
+            num_episodes (int, optional): Number of episodes. Defaults to 1.
+            batch_size (int, optional): Batch size for the training algorithm. Defaults to 0.
+        """
         episode_rewards = [0.0]
 
         print("Starting training...")

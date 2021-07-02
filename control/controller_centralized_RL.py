@@ -1,6 +1,9 @@
 from MAC.control.controller_centralized import Centralized
 import numpy as np
 
+"""Class to use when using centralized controller
+for RL setting
+"""
 class CentralizedRL(Centralized):
 
     def __init__(self, env, agents, central_agent):
@@ -8,7 +11,16 @@ class CentralizedRL(Centralized):
         super().__init__(env, agents, central_agent)
 
     def run(self, render=False, max_iteration=None, max_episode_len=1, num_episodes=1, batch_size=0):
+        """Runs the controller on the environment given in the init,
+        with the agents given in the init
 
+        Args:
+            render (bool, optional): Whether to render while runngin. Defaults to False.
+            max_iteration ([type], optional): Number of steps to run. Defaults to infinity.
+            max_episode_len (int, optional): Upper cap on episode length. Defaults to 1.
+            num_episodes (int, optional): Number of episodes. Defaults to 1.
+            batch_size (int, optional): Batch size for the training algorithm. Defaults to 0.
+        """
         print("Training...")
         self.train(max_episode_len, num_episodes, batch_size=batch_size)
         print("Finished Training")
@@ -37,8 +49,16 @@ class CentralizedRL(Centralized):
             self.environment.get_env().render()
 
     def get_joint_action(self, observation):
+        """Returns the joint actions of all the agents
 
+        Args:
+            observation ([dict]): The agents observations
+
+        Returns:
+            dict: dict of all the actions
+        """
         observations = []
+        # Dict to list:
         for agent_name in self.agents.keys():
             observations.append(observation[agent_name])
 
@@ -54,12 +74,31 @@ class CentralizedRL(Centralized):
         return joint_action
 
     def decode_state(self, obs, needs_conv):
+        """Turns the ovservation from a list to np array
+
+        Args:
+            obs (list): list of observations
+            needs_conv (bool): whether we want conv layers (affects the shape)
+
+        Returns:
+            ndarray: the observations
+        """
         if needs_conv:
             return np.vstack(obs)
         else:
             return np.hstack(obs)
 
     def decode_action(self, action, num_actions, num_agents):
+        """Decodes the action from the model to RL env friendly format
+
+        Args:
+            action (int): The action from the model
+            num_actions (int): number of actions avaiable to every agent
+            num_agents (int): number of agents
+
+        Returns:
+            list: list of individual actions
+        """
         out = []
         for ind in range(num_agents):
             out.append(action % num_actions)
@@ -67,6 +106,13 @@ class CentralizedRL(Centralized):
         return list(reversed(out))
 
     def train(self, max_episode_len, num_episodes, batch_size=0):
+        """Train the agents
+
+        Args:
+            max_episode_len (int, optional): Upper cap on episode length. Defaults to 1.
+            num_episodes (int, optional): Number of episodes. Defaults to 1.
+            batch_size (int, optional): Batch size for the training algorithm. Defaults to 0.
+        """
         episode_rewards = [0.0]
 
         print("Starting training...")
