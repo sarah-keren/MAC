@@ -2,8 +2,8 @@ import argparse
 import sys
 import numpy as np
 sys.path.append('..')
-from MAC.control import controller_decentralized
-from MAC.agents import agent, policy_gradient
+from control import controller_decentralized
+from agents import agent, policy_gradient
 
 
 def main():
@@ -35,7 +35,7 @@ def set_env(environment_name):
 
     if environment_name == 'taxi':
         sys.path.append('../environments/MultiTaxiEnv')
-        from MAC.environments.MultiTaxiEnv.taxi_environment import TaxiEnv
+        from environments.MultiTaxiEnv.taxi_environment import TaxiEnv
         env = TaxiEnv(2)
         # Make sure it works with our API:
         env.agents = env.taxis_names
@@ -49,7 +49,7 @@ def set_env(environment_name):
 
     elif environment_name == 'cleanup':
         sys.path.append('../environments/cleanup')
-        from MAC.environments.cleanup.social_dilemmas.envs.cleanup import CleanupEnv
+        from environments.cleanup.social_dilemmas.envs.cleanup import CleanupEnv
         env = CleanupEnv(num_agents=5, render=True)
         env.action_spaces = {
             agent_name: env.action_space for agent_name in env.agents

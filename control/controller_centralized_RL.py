@@ -1,4 +1,4 @@
-from MAC.control.controller_centralized import Centralized
+from control.controller_centralized import Centralized
 import numpy as np
 
 """Class to use when using centralized controller

@@ -4,7 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 from torch import autograd
-from MAC.agents.agent import DecisionMaker
+from agents.agent import DecisionMaker
 
 
 class DeepPolicyGradient(DecisionMaker):

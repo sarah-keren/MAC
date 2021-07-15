@@ -3,7 +3,7 @@
 from gym.spaces import Box
 from gym.spaces import Discrete
 import numpy as np
-import utility_funcs as util
+import environments.cleanup.utility_funcs as util
 
 # basic moves every agent should do
 BASE_ACTIONS = {0: 'MOVE_LEFT',  # Move left

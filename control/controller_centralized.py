@@ -1,5 +1,5 @@
 from abc import abstractmethod
-from MAC.control.controller import Controller
+from control.controller import Controller
 import numpy as np
 
 """Abstract parent class for centralized controller 

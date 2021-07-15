@@ -1,5 +1,5 @@
 import numpy as np
-from social_dilemmas.envs.cleanup import CleanupEnv
+from environments.cleanup.social_dilemmas.envs.cleanup import CleanupEnv
 
 env = CleanupEnv(num_agents=5, render=True)
 

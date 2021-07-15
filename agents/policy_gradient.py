@@ -1,5 +1,5 @@
 import numpy as np
-from MAC.agents.agent import DecisionMaker
+from agents.agent import DecisionMaker
 
 
 """A PG algorithm for RL

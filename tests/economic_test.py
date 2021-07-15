@@ -3,7 +3,7 @@ import sys
 import numpy as np
 
 sys.path.append('..')
-from MAC.control.controller_economic import EconomicControl
+from control.controller_economic import EconomicControl
 
 """Testing the economic control"""
 
@@ -22,17 +22,17 @@ def set_env(environment_name):
     print('Initializing environment...')
     if environment_name == 'corners':
         sys.path.append('environments/corners')
-        from corners_env import CornersEnv
+        from environments.corners.corners_env import CornersEnv
         env = CornersEnv()
-        from corners_agents import EconomicGoalAgent
+        from environments.corners.corners_agents import EconomicGoalAgent
         basic_agent_class = EconomicGoalAgent
 
         tasks = [[0,0], [0, 4], [4, 0], [4, 4], [2,2]] # The goal position
 
     if environment_name == 'taxi':
         sys.path.append('../environments/MultiTaxiEnv')
-        from MAC.environments.MultiTaxiEnv.taxi_environment import TaxiEnv
-        from MAC.environments.MultiTaxiEnv.taxi_task_agent import TaxiTaskAgent
+        from environments.MultiTaxiEnv.taxi_environment import TaxiEnv
+        from environments.MultiTaxiEnv.taxi_task_agent import TaxiTaskAgent
         
         num_taxis, num_passengers = 2, 2 # For readability
         env = TaxiEnv(num_taxis = num_taxis, num_passengers = num_passengers)

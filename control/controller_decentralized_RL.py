@@ -1,4 +1,4 @@
-from MAC.control.controller_decentralized import Decentralized
+from control.controller_decentralized import Decentralized
 
 
 class DecentralizedRL(Decentralized):
@@ -62,17 +62,17 @@ class DecentralizedRL(Decentralized):
             ep_reward = 0.0
             agent_rewards = {agent_name: 0.0 for agent_name in self.agents.keys()}
             for _ in range(max_episode_len):
-                actions = {agent_name: self.agents[agent_name].get_train_action(obs[agent_name]) for
+                actions = {agent_name: self.agents[agent_name].get_decision_maker().get_train_action(obs[agent_name]) for
                                agent_name in self.agents.keys()}
                 new_obs, rewards, done, info = self.environment.get_env().step(actions)
                 for agent_name in self.agents.keys():
-                    self.agents[agent_name].update_step(obs[agent_name], actions[agent_name],
+                    self.agents[agent_name].get_decision_maker().update_step(obs[agent_name], actions[agent_name],
                                                             new_obs[agent_name], rewards[agent_name], done[agent_name])
                     ep_reward += rewards[agent_name]
 
                 if batch_size > 0:
                     for agent_name in self.agents.keys():
-                        self.agents[agent_name].update_episode(batch_size)
+                        self.agents[agent_name].get_decision_maker().update_episode(batch_size)
 
                 obs = new_obs
                 terminal = False
@@ -84,4 +84,4 @@ class DecentralizedRL(Decentralized):
             episode_rewards.append(ep_reward)
 
             for agent_name in self.agents.keys():
-                self.agents[agent_name].update_episode()
+                self.agents[agent_name].get_decision_maker().update_episode()

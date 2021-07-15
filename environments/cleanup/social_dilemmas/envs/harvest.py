@@ -1,8 +1,8 @@
 import numpy as np
 
-from social_dilemmas.envs.agent import HarvestAgent  # HARVEST_VIEW_SIZE
-from social_dilemmas.constants import HARVEST_MAP
-from social_dilemmas.envs.map_env import MapEnv, ACTIONS
+from environments.cleanup.social_dilemmas.envs.agent import HarvestAgent  # HARVEST_VIEW_SIZE
+from environments.cleanup.social_dilemmas.constants import HARVEST_MAP
+from environments.cleanup.social_dilemmas.envs.map_env import MapEnv, ACTIONS
 
 APPLE_RADIUS = 2
 

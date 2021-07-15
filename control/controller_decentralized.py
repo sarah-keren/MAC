@@ -1,4 +1,4 @@
-from MAC.control.controller import Controller
+from control.controller import Controller
 
 
 class Decentralized(Controller):
@@ -18,7 +18,7 @@ class Decentralized(Controller):
         """
         joint_action = {}
         for agent_name in self.agents.keys():
-            action = self.agents[agent_name].get_action(observation[agent_name])
+            action = self.agents[agent_name].get_decision_maker().get_action(observation[agent_name])
             joint_action[agent_name] = action
 
         return joint_action

@@ -12,7 +12,7 @@ from gym import utils
 
 # We need this for the config when calling from a different dir:
 sys.path.append(os.path.dirname(__file__)) 
-from config import TAXI_ENVIRONMENT_REWARDS, BASE_AVAILABLE_ACTIONS, ALL_ACTIONS_NAMES
+from environments.MultiTaxiEnv.config import TAXI_ENVIRONMENT_REWARDS, BASE_AVAILABLE_ACTIONS, ALL_ACTIONS_NAMES
 
 orig_MAP = [
     "+---------+",

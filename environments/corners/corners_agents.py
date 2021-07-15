@@ -2,7 +2,7 @@ import time
 
 import numpy as np
 from numpy.core.arrayprint import _get_format_function
-from corners_env import CornersEnv, Action
+from environments.corners.corners_env import CornersEnv, Action
 
 class GoalAgent:
     """Move toward a goal, 50% for move in x
