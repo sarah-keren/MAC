@@ -5,6 +5,8 @@ import numpy as np
 sys.path.append('..')
 from MAC.control.controller_economic import EconomicControl
 
+"""Testing the economic control"""
+
 def main():
     args = parse_args()
     env, agent_class, tasks = set_env(args.env)

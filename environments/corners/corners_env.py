@@ -14,6 +14,11 @@ BOARD_DOWN = "╚═══════════╝"
 
 class Action(IntEnum):noop=0;up=1;right=2;down=3;left=4
 
+"""A simple environment for a Social Dilemma - 
+We need one agent in every corner and one in the
+middle to finish the episode - but the agent in the
+middle gets less reward then the ones in the corners.
+"""
 class CornersEnv:
 
     def __init__(self):

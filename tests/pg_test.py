@@ -12,17 +12,8 @@ def main():
     #centralized_pg_test(env)
     decentralized_test(env)
 
-"""
-def centralized_pg_test(env):
-    print("Running centralized test:")
-    agent = PGAgent(env, centralized=True)
-    agent.train(10, 10)
-    controller = CentralizedControl(env, agent)
-    controller.run(10)
-"""
-
-
 def decentralized_test(env):
+    """Runs a decentralized test with the Policy Gradient Algorithm."""
     print("Running decentralized test:")
     num_actions_per_agent = env.action_spaces[env.possible_agents[0]].n
 

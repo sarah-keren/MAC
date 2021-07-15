@@ -25,6 +25,7 @@ class DeepPolicyGradient(DecisionMaker):
         self.optimizer = optim.Adam(self.policy.parameters(), lr=learning_rate)
 
     def learn(self):
+        """Updating the netwotk based on the memory"""
         self.optimizer.zero_grad()
         G = np.zeros_like(self.reward_mem, dtype=np.float64)
 
@@ -52,6 +53,7 @@ class DeepPolicyGradient(DecisionMaker):
     """ Training Callbacks """
 
     def get_train_action(self, observation):
+        """Get action for when training"""
         probs = F.softmax(self.policy.forward(observation))
         action_probs = torch.distributions.Categorical(probs)
         action = action_probs.sample()
@@ -77,6 +79,7 @@ class DeepPolicyGradient(DecisionMaker):
         return action.item()
 
 
+"""A class representing a fully connected network for the policy"""
 class PolicyNetwork(nn.Module):
 
     def __init__(self, input_dims, output_dims, mapping_fn=None):
@@ -104,6 +107,7 @@ class PolicyNetwork(nn.Module):
         return x
 
 
+"""A class representing a fully convolution network for the policy"""
 class ConvPolicyNetwork(nn.Module):
 
     def __init__(self, input_dims, output_dims):

@@ -6,7 +6,10 @@ class Agent:
     def get_decision_maker(self):
         return self.decision_maker
 
-
+"""
+An abstract class for choosing an action, part of an agent.
+(An agent can have one or several of these)
+"""
 class DecisionMaker:
 
     def __init__(self):
@@ -15,6 +18,9 @@ class DecisionMaker:
     def get_action(self, observation):
         pass
 
+    """
+    Functions for training:
+    """
     def get_train_action(self, observation):
         pass
 

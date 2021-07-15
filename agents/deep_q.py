@@ -7,6 +7,9 @@ from torch import autograd
 from MAC.agents.agent import DecisionMaker
 
 
+
+"""A Deep Q-Network algorithm for RL
+"""
 class DQN(DecisionMaker):
 
     def __init__(self, input_dims, num_actions, is_conv=False, learning_rate=3e-4, gamma=0.99,
@@ -27,6 +30,7 @@ class DQN(DecisionMaker):
         self.MSE_loss = nn.MSELoss()
 
     def get_action(self, observation):
+        """Get an action according the network"""
         observation = autograd.Variable(torch.from_numpy(observation.copy()).float().unsqueeze(0))
         qvals = self.model.forward(observation)
         action = np.argmax(qvals.cpu().detach().numpy())
@@ -34,6 +38,7 @@ class DQN(DecisionMaker):
         return action
 
     def get_train_action(self, observation, eps=0.1):
+        """Get action for when training"""
         observation = autograd.Variable(torch.from_numpy(observation.copy()).float().unsqueeze(0))
         qvals = self.model.forward(observation)
         action = np.argmax(qvals.cpu().detach().numpy())
@@ -61,9 +66,11 @@ class DQN(DecisionMaker):
         return loss
 
     def update_step(self, obs, action,new_obs, reward, done):
+        """Add the step to the replay buffer"""
         self.replay_buffer.push(obs, action, new_obs, reward, done)
 
     def update_episode(self, batch_size):
+        """Updating the Network"""
         if len(self.replay_buffer) > batch_size:
             batch = self.replay_buffer.sample(batch_size)
             loss = self.compute_loss(batch)
@@ -72,6 +79,7 @@ class DQN(DecisionMaker):
             self.optimizer.step()
 
 
+"""Class for the fully-connected Q-Network"""
 class DQNetwork(nn.Module):
 
     def __init__(self, input_dim, output_dim, mapping_fn=None):
@@ -97,6 +105,7 @@ class DQNetwork(nn.Module):
         return qvals
 
 
+"""Class for the convolution Q-Network"""
 class ConvDQNetwork(nn.Module):
 
     def __init__(self, input_dim, output_dim):
@@ -134,7 +143,7 @@ class ConvDQNetwork(nn.Module):
     def feature_size(self):
         return self.conv(autograd.Variable(torch.zeros(1, *self.input_dim))).view(1, -1).size(1)
 
-
+"""Class for the Replay Buffer"""
 class BasicBuffer:
 
     def __init__(self, max_size):

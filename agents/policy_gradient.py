@@ -2,6 +2,8 @@ import numpy as np
 from MAC.agents.agent import DecisionMaker
 
 
+"""A PG algorithm for RL
+"""
 class PolicyGradient(DecisionMaker):
 
     def __init__(self, num_actions, num_obs, is_conv=False, num_agents=1, alpha=0.00025, gamma=0.9,
@@ -53,6 +55,8 @@ class PolicyGradient(DecisionMaker):
     """ Training Callbacks """
 
     def get_train_action(self, state):
+        """Action for when training
+        """
         if self.mapping_fn:
             state = self.mapping_fn(state)
 
