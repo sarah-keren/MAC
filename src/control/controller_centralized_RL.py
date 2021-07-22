@@ -28,6 +28,7 @@ class CentralizedRL(Centralized):
         done = False
         index = 0
         observation = self.environment.get_env().reset()
+        self.total_rewards = []
         while done is not True:
             index += 1
             if max_iteration is not None and index > max_iteration:
@@ -41,6 +42,7 @@ class CentralizedRL(Centralized):
 
             joint_action = self.get_joint_action(observation)
             observation, reward, done, info = self.perform_joint_action(joint_action)
+            self.total_rewards.append(reward)
             done = all(value == True for value in done.values())
             if done:
                 break
