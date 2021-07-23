@@ -1,5 +1,5 @@
 from control.controller_decentralized import Decentralized
-
+from tqdm import tqdm
 
 class DecentralizedRL(Decentralized):
 
@@ -19,13 +19,13 @@ class DecentralizedRL(Decentralized):
             batch_size (int, optional): Batch size for the training algorithm. Defaults to 0.
         """
 
-        print("Training...")
-        self.train(max_episode_len, num_episodes, batch_size=batch_size)
-        print("Finished Training")
-
+        # print("Training...")
+        # self.train(max_episode_len, num_episodes, batch_size=batch_size)
+        # print("Finished Training")
         done = False
         index = 0
         observation = self.environment.get_env().reset()
+        self.total_rewards = []
         while done is not True:
             index += 1
             if max_iteration is not None and index > max_iteration:
@@ -39,6 +39,7 @@ class DecentralizedRL(Decentralized):
 
             joint_action = self.get_joint_action(observation)
             observation, reward, done, info = self.perform_joint_action(joint_action)
+            self.total_rewards.append(reward)
             done = all(value == True for value in done.values())
             if done:
                 break
@@ -57,7 +58,7 @@ class DecentralizedRL(Decentralized):
         episode_rewards = [0.0]
 
         print("Starting training...")
-        for i in range(num_episodes):
+        for i in tqdm(range(num_episodes)):
             obs = self.environment.get_env().reset()
             ep_reward = 0.0
             agent_rewards = {agent_name: 0.0 for agent_name in self.agents.keys()}

@@ -1,5 +1,6 @@
 from control.controller_centralized import Centralized
 import numpy as np
+from tqdm import tqdm
 
 """Class to use when using centralized controller
 for RL setting
@@ -21,9 +22,9 @@ class CentralizedRL(Centralized):
             num_episodes (int, optional): Number of episodes. Defaults to 1.
             batch_size (int, optional): Batch size for the training algorithm. Defaults to 0.
         """
-        print("Training...")
-        self.train(max_episode_len, num_episodes, batch_size=batch_size)
-        print("Finished Training")
+        # print("Training...")
+        # self.train(max_episode_len, num_episodes, batch_size=batch_size)
+        # print("Finished Training")
 
         done = False
         index = 0
@@ -118,7 +119,7 @@ class CentralizedRL(Centralized):
         episode_rewards = [0.0]
 
         print("Starting training...")
-        for i in range(num_episodes):
+        for i in tqdm(range(num_episodes)):
             obs = self.environment.get_env().reset()
             ep_reward = 0.0
             for _ in range(max_episode_len):

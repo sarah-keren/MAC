@@ -13,23 +13,46 @@ from agents.agent import Agent
 from agents.random_agent import RandomAgent
 from environments.env_wrapper import EnvWrappper
 
+MAX_EPISODE_LEN = 25
 
 def main():
-    # controller = make_random_decentralized_control()
-    # results = evaluate_controller(controller, 100, RL=False)
-    controller = make_rl_decentralized_control('dpg')
-    results = evaluate_controller(controller, 100, RL=True)
+    mode = 'CENT_DPG'
+    
+    if mode == 'DECENT_RANDOM':
+        controller = make_random_decentralized_control()
+        rl = False
+
+    elif mode == 'DECENT_DPG':
+        controller = make_rl_decentralized_control('dpg')
+        controller.train(MAX_EPISODE_LEN, 1000)
+        rl = True
+
+    elif mode == 'CENT_DPG':
+        controller = make_rl_centralized_control('dpg')
+        controller.train(MAX_EPISODE_LEN, 1000)
+        rl = True
+    
+    results = evaluate_controller(controller, 100, RL=rl)
     sums = sum_all_agents(results)
     plt.style.use('seaborn')
     plt.hist(sums)
+    print(f'Mean is {sum(sums)/len(sums)}')
     plt.show()
 
-def make_rl_decentralized_control(centralized_policy):
+def make_rl_centralized_control(centralized_policy):
     env = set_env()
     decision_maker = create_centralized_agent(centralized_policy, env)
     env_agents = env.get_env_agents()
     centralized_agents = {agent_name: None  for agent_name in env_agents}
     controller = CentralizedRL(env, centralized_agents, decision_maker)
+    return controller
+
+def make_rl_decentralized_control(decentralized_policy):
+    env = set_env()
+    env_agents = env.get_env_agents()
+    decentralized_agents = {agent_name: create_decentralized_agent(decentralized_policy, env)
+          for agent_name in env_agents}
+    controller = DecentralizedRL(env, decentralized_agents)
     return controller
 
 def make_random_decentralized_control():
@@ -85,6 +108,26 @@ def create_centralized_agent(policy_name, env):
     num_obs = env.get_num_obs() if needs_conv else\
         (1, env.get_num_obs()[::-1][0] * (len(env.get_env_agents())))
     num_actions = (env.get_num_actions()) ** (len(env.get_env_agents()))    
+    mapping_fn = lambda x: x.flatten() if not needs_conv else None
+    
+    if policy_name == 'pg':
+        return Agent(PolicyGradient(num_actions, num_obs, mapping_fn=mapping_fn))
+    
+    elif policy_name == 'dpg':
+        return Agent(DeepPolicyGradient(num_obs, num_actions, is_conv=needs_conv,
+                                        mapping_fn=mapping_fn)) 
+        
+    elif policy_name == 'dqn':
+        return Agent(DQN(num_obs, num_actions, is_conv=needs_conv,
+                                        mapping_fn=mapping_fn)) 
+        
+    print("Invalid Policy!")       
+    return
+
+def create_decentralized_agent(policy_name, env):
+    num_obs = env.get_num_obs()
+    num_actions = env.get_num_actions()
+    needs_conv = env.get_needs_conv()
     mapping_fn = lambda x: x.flatten() if not needs_conv else None
     
     if policy_name == 'pg':
