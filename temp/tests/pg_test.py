@@ -1,35 +1,34 @@
 import argparse
 import sys
 import numpy as np
-sys.path.append('..')
+sys.path.append('../..')
 from control import controller_decentralized
+from agents import agent, policy_gradient
 
-class RandomAgent:
-    """action_space can be either an action space (Discrete, Box etc)
-       or a dictionary (key per agent) of action spaces
-    """
-    def __init__(self, action_space):
-        self.space = action_space
-
-    def get_action(self, observation):
-        if type(self.space) == dict:
-            return {agent: self.space[agent].sample() for agent in self.space.keys()}
-        else:
-            return self.space.sample()
 
 def main():
     args = parse_args()
     env = set_env(args.env)
+    #centralized_pg_test(env)
     decentralized_test(env)
 
 def decentralized_test(env):
-    print("Running decentralized random test:")
+    """Runs a decentralized test with the Policy Gradient Algorithm."""
+    print("Running decentralized test:")
+    num_actions_per_agent = env.action_spaces[env.possible_agents[0]].n
 
-    agents = {agent_name: RandomAgent(env.action_spaces[agent_name])
-              for agent_name in env.agents}
-    
+    if len(env.observation_spaces[env.possible_agents[0]].shape) == 2:
+        obs_size_per_agent = env.observation_spaces[env.possible_agents[0]].shape[1]
+    else:
+        obs_size_per_agent = env.observation_spaces[env.possible_agents[0]].shape[0]
+
+    agents = {agent_name: agent.Agent(policy_gradient.PolicyGradient(num_actions_per_agent,
+              np.random.rand(obs_size_per_agent, num_actions_per_agent),mapping_fn=lambda x: x.flatten()))
+              for agent_name in env.possible_agents}
     control = controller_decentralized.Decentralized(agents, env)
+    control.train(25, 100)
     control.run(render=True, max_iteration=100)
+
 
 def set_env(environment_name):
     print('Initializing environment...')
@@ -49,7 +48,7 @@ def set_env(environment_name):
         env.possible_agents = [agent for agent in env.agents]
 
     elif environment_name == 'cleanup':
-        sys.path.append('environments/cleanup')
+        sys.path.append('../environments/cleanup')
         from environments.cleanup.social_dilemmas.envs.cleanup import CleanupEnv
         env = CleanupEnv(num_agents=5, render=True)
         env.action_spaces = {
@@ -60,11 +59,6 @@ def set_env(environment_name):
         }
         env.possible_agents = [agent for agent in env.agents.keys()]
 
-    elif environment_name == 'corners':
-        sys.path.append('environments/corners')
-        from environments.corners.corners_env import CornersEnv
-        env = CornersEnv()
-
     # Petting Zoo:
     elif environment_name == 'particle':
         from pettingzoo.mpe import simple_spread_v2
@@ -74,7 +68,6 @@ def set_env(environment_name):
         from pettingzoo.butterfly import pistonball_v4
         env = pistonball_v4.parallel_env(continuous=False)
 
-    env.reset() # We have to call reset() for the env to have agents list
     return env
 
 
@@ -83,7 +76,7 @@ def parse_args():
     parser.add_argument(
         '-e', '--env',
         required=True,
-        choices=['taxi', 'particle', 'cleanup', 'piston', 'corners'],
+        choices=['taxi', 'particle', 'cleanup', 'piston'],
         help='Environment to run test on.'
     )
     return parser.parse_args()

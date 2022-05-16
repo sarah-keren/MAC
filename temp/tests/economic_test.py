@@ -2,7 +2,7 @@ import argparse
 import sys
 import numpy as np
 
-sys.path.append('..')
+sys.path.append('../..')
 from control.controller_economic import EconomicControl
 
 """Testing the economic control"""

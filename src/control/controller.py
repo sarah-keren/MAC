@@ -6,10 +6,9 @@ class Controller(ABC):
     """
 
     # init agents and their observations
-    def __init__(self, environment, agents, central_agent=None):
+    def __init__(self, environment, agents):
         self.environment = environment
         self.agents = agents
-        self.central_agent = central_agent
 
     def run(self, render=False, max_iteration=None):
         """Runs the controller on the environment given in the init,
@@ -33,7 +32,6 @@ class Controller(ABC):
                 self.environment.get_env().render()
 
             # get actions for each agent to perform
-
             joint_action = self.get_joint_action(observation)
             observation, reward, done, info = self.perform_joint_action(joint_action)
             self.total_rewards.append(reward)

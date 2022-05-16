@@ -78,7 +78,7 @@ def evaluate_controller(controller, num_runs, RL):
     return all_results
 
 def set_env():
-    sys.path.append('../environments/MultiTaxiEnv')
+    sys.path.append('MultiTaxiEnv')
     from environments.MultiTaxiEnv.taxi_environment import TaxiEnv
     env = TaxiEnv(2)
     # Make sure it works with our API:
