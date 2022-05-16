@@ -1,15 +1,16 @@
-from abc import abstractmethod
-from control.controller import Controller
+from .controller import Controller
 import numpy as np
+
 
 """Abstract parent class for centralized controller 
 """
-class Centralized(Controller):
+class CentralizedController(Controller):
 
     def __init__(self, env, agents, central_agent):
         # initialize super class
-        super().__init__(env, agents, central_agent)
-        self.decision_maker = self.central_agent.get_decision_maker()
+        super().__init__(env, agents)
+
+        self.central_agent = central_agent
 
 
     def get_joint_action(self, observation):
@@ -28,7 +29,7 @@ class Centralized(Controller):
 
         state = self.decode_state(observations, self.environment.get_needs_conv())
         # centerlized decision making
-        joint_act = self.decision_maker.get_action(state)
+        joint_act = self.central_agent.decision_maker.get_action(state)
         joint_act = self.decode_action(joint_act, self.environment.get_num_actions(),
                                        len(self.environment.get_env_agents()))
         joint_action = {}

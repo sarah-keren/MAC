@@ -1,7 +1,7 @@
-from control.controller import Controller
+from .controller import Controller
 
 
-class Decentralized(Controller):
+class DecentralizedController(Controller):
 
     def __init__(self, env, agents):
         # initialize super class
