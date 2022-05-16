@@ -12,7 +12,6 @@ class CentralizedController(Controller):
 
         self.central_agent = central_agent
 
-
     def get_joint_action(self, observation):
         """Returns the joint actions of all the agents
 
