@@ -7,9 +7,9 @@ class Controller(ABC):
     """
 
     # init agents and their observations
-    def __init__(self, environment, agents):
-        self.environment = environment
-        self.agents = agents
+    def __init__(self, env):
+        self.env = env
+        self.agent_ids = self.env.get_env_agents()
 
     def run(self, render=False, max_iteration=None):
         """Runs the controller on the environment given in the init,
@@ -21,7 +21,7 @@ class Controller(ABC):
         """
         done = False
         index = 0
-        observation = self.environment.get_env().reset()
+        observation = self.env.get_env().reset()
         self.total_rewards = []
         while done is not True:
             index += 1
@@ -30,21 +30,29 @@ class Controller(ABC):
 
             # display environment
             if render:
-                self.environment.get_env().render()
+                # TODO assuming `render` function in environment (gym API)
+                self.env.render()
 
-            # get actions for each agent to perform
+            # assert observation is in dict form
+            observation = self.env.observation_to_dict(observation)
+
+            # get actions for all agents and perform
             joint_action = self.get_joint_action(observation)
             observation, reward, done, info = self.perform_joint_action(joint_action)
+
+            # save rewards
             self.total_rewards.append(reward)
-            done = all(value == True for value in done.values())
-            if done:
+
+            # check if all agents are done
+            if all(done.values()):
                 break
 
         if render:
-            self.environment.get_env().render()
+            self.env.render()
 
     def perform_joint_action(self, joint_action):
-        return self.environment.get_env().step(joint_action)
+        return self.env.get_env().step(joint_action)
 
+    @abstractmethod
     def get_joint_action(self, observation):
         pass

@@ -6,9 +6,9 @@ import numpy as np
 """
 class CentralizedController(Controller):
 
-    def __init__(self, env, agents, central_agent):
+    def __init__(self, env, central_agent):
         # initialize super class
-        super().__init__(env, agents)
+        super().__init__(env)
 
         self.central_agent = central_agent
 
@@ -21,39 +21,39 @@ class CentralizedController(Controller):
         Returns:
             dict: dict of all the actions
         """
-        observations = []
-        # Dict to list:
-        for agent_name in self.agents.keys():
-            observations.append(observation[agent_name])
+        # observations = {}
+        # # Dict to list:
+        # for agent_name in self.agents:
+        #     observations[agent_name] = observation[agent_name]
+        #
+        # state = self.decode_state(observations)
+        # # centerlized decision making
+        # joint_act = self.central_agent.decision_maker.get_action(state)
+        # joint_act = self.decode_action(joint_act, len(self.env.get_env_agents()))
+        # joint_action = {}
+        # for i, agent_name in enumerate(self.env.get_env_agents()):
+        #     action = joint_act[i]
+        #     joint_action[agent_name] = action
+        #
+        # return joint_action
 
-        state = self.decode_state(observations, self.environment.get_needs_conv())
-        # centerlized decision making
-        joint_act = self.central_agent.decision_maker.get_action(state)
-        joint_act = self.decode_action(joint_act, self.environment.get_num_actions(),
-                                       len(self.environment.get_env_agents()))
-        joint_action = {}
-        for i, agent_name in enumerate(self.environment.get_env_agents()):
-            action = joint_act[i]
-            joint_action[agent_name] = action
-
-        return joint_action
+        return self.central_agent.get_decision_maker().get_action(observation)
 
     # temp implementation
     def decode_state(self, obs):
         return obs
 
-    def decode_action(self, action, num_actions, num_agents):
+    def decode_action(self, action, num_agents):
         """Decodes the action from the model to RL env friendly format
 
         Args:
             action (int): The action from the model
-            num_actions (int): number of actions avaiable to every agent
             num_agents (int): number of agents
 
         Returns:
             list: list of individual actions
         """
-        out = []
+        out = {}
         for ind in range(num_agents):
             out.append(action % num_actions)
             action = action // num_actions

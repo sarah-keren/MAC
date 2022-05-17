@@ -1,7 +1,7 @@
-import abc
+from abc import ABC, abstractmethod
 
 
-class EnvWrappper:
+class EnvWrappper(ABC):
 
     def __init__(self, env, env_agent_ids, observation_spaces, action_spaces):
         self.env = env
@@ -21,8 +21,16 @@ class EnvWrappper:
     def get_env_agents(self):
         return self.env_agent_ids
 
+    @abstractmethod
     def step(self, joint_action):
-        return self.env.step(joint_action)
+        pass
+
+    @abstractmethod
+    def observation_to_dict(self, obs):
+        pass
+
+    def render(self):
+        pass
 
 
 class EnvWrappperMultiTaxi(EnvWrappper):
@@ -41,22 +49,31 @@ class EnvWrappperMultiTaxi(EnvWrappper):
 
         super().__init__(env, env.taxis_names, observation_spaces, action_spaces)
 
+    def step(self, joint_action):
+        return self.env.step(joint_action)
 
-class EnvWrappperPZ:
+    def observation_to_dict(self, obs):
+        return obs
+
+    def render(self):
+        return self.env.render()
+
+
+class EnvWrappperPZ(EnvWrappper):
 
     def __init__(self, env):
 
         # get action space of each agent
         action_spaces = {
-            agent_id: env.action_space for agent_id in env.agents
+            agent_id: env.action_space(agent_id) for agent_id in env.agent_ids
         }
 
         # get observation space for each agent
         observation_spaces = {
-            agent_id: env.observation_space for agent_id in env.agents
+            agent_id: env.observation_space(agent_id) for agent_id in env.agent_ids
         }
 
-        super(EnvWrappper, self).__init__(env, env.agents, observation_spaces, action_spaces)
+        super().__init__(env, env.agent_ids, observation_spaces, action_spaces)
 
 
 
