@@ -38,21 +38,9 @@ class CentralizedController(Controller):
 
         return joint_action
 
-
-    def decode_state(self, obs, needs_conv):
-        """Turns the ovservation from a list to np array
-
-        Args:
-            obs (list): list of observations
-            needs_conv (bool): whether we want conv layers (affects the shape)
-
-        Returns:
-            ndarray: the observations
-        """
-        if needs_conv:
-            return np.vstack(obs)
-        else:
-            return np.hstack(obs)
+    # temp implementation
+    def decode_state(self, obs):
+        return obs
 
     def decode_action(self, action, num_actions, num_agents):
         """Decodes the action from the model to RL env friendly format
