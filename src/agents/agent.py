@@ -1,5 +1,6 @@
 class Agent:
 
+
     def __init__(self, decision_maker, sensor_function =None, message_filter = None):
         self.decision_maker = decision_maker
         self.sensor_function = sensor_function
