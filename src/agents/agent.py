@@ -1,8 +1,9 @@
 class Agent:
 
-    def __init__(self, decision_maker, sensor_function =None):
+    def __init__(self, decision_maker, sensor_function =None, message_filter = None):
         self.decision_maker = decision_maker
         self.sensor_function = sensor_function
+        self.message_filter = message_filter
 
     def get_decision_maker(self):
         return self.decision_maker
@@ -45,3 +46,5 @@ class RandomDecisionMaker:
             return {agent: self.space[agent].sample() for agent in self.space.keys()}
         else:
             return self.space.sample()
+
+
