@@ -24,6 +24,9 @@ class DecentralizedController(Controller):
         Returns:
             dict: the actions for the agents
         """
+        observation = {agent_id: self.agents[agent_id].get_observation(obs)
+                       for agent_id, obs in observation.items()}
+
         joint_action = {}
         for agent_name in self.agent_ids:
             action = self.agents[agent_name].get_decision_maker().get_action(observation[agent_name])

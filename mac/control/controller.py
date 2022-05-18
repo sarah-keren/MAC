@@ -30,7 +30,6 @@ class Controller(ABC):
 
             # display environment
             if render:
-                # TODO assuming `render` function in environment (gym API)
                 self.env.render()
 
             # assert observation is in dict form

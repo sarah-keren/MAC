@@ -37,6 +37,9 @@ class CentralizedController(Controller):
         #
         # return joint_action
 
+        observation = {agent_id: self.central_agent.get_observation(obs)
+                       for agent_id, obs in observation.items()}
+
         return self.central_agent.get_decision_maker().get_action(observation)
 
     # temp implementation
