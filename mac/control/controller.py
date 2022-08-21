@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 
-
 class Controller(ABC):
     """An abstract controller class, for other controllers
     to inherit from
