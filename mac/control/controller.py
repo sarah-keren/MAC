@@ -49,7 +49,7 @@ class Controller(ABC):
             self.env.render()
 
     def perform_joint_action(self, joint_action):
-        return self.env.get_env().step(joint_action)
+        return self.env.step(joint_action)
 
     @abstractmethod
     def get_joint_action(self, observation):
