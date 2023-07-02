@@ -13,6 +13,7 @@ class CentralizedController(Controller):
         self.central_agent = central_agent
 
     def get_joint_action(self, observation):
+        print ("Centralized controller - get joint action")
         """Returns the joint actions of all the agents
 
         Args:
@@ -36,11 +37,15 @@ class CentralizedController(Controller):
         #     joint_action[agent_name] = action
         #
         # return joint_action
-
+    
         observation = {agent_id: self.central_agent.get_observation(obs)
                        for agent_id, obs in observation.items()}
-
-        return self.central_agent.get_decision_maker().get_action(observation)
+        print("observation:")
+        print(observation)
+        joint_action_to_take = self.central_agent.get_decision_maker().get_action(observation);
+        print("joint action to take:")
+        print(joint_action_to_take)
+        return joint_action_to_take
 
     # temp implementation
     def decode_state(self, obs):

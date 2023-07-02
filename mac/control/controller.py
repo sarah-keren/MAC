@@ -11,6 +11,8 @@ class Controller(ABC):
         self.agent_ids = self.env.get_env_agents()
 
     def run(self, render=False, max_iteration=None):
+        print("***************************")
+        print("Controller - run function")
         """Runs the controller on the environment given in the init,
         with the agents given in the init
 
@@ -33,9 +35,13 @@ class Controller(ABC):
 
             # assert observation is in dict form
             observation = self.env.observation_to_dict(observation)
+            print("observation as dict:")
+            print(observation)
 
             # get actions for all agents and perform
             joint_action = self.get_joint_action(observation)
+            print("joint action:")
+            print(joint_action)
             observation, reward, done, info = self.perform_joint_action(joint_action)
 
             # save rewards
@@ -49,7 +55,9 @@ class Controller(ABC):
             self.env.render()
 
     def perform_joint_action(self, joint_action):
-        return self.env.get_env().step(joint_action)
+        print("*******************)
+        print("Controllet - perform_join_action")
+        return self.env.step(joint_action)
 
     @abstractmethod
     def get_joint_action(self, observation):
